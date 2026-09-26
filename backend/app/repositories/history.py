@@ -4,17 +4,20 @@ from datetime import datetime, timezone
 from app.db import connect
 
 
-def insert_run(wall_id: int, roll_id: int, result: dict, note: str = "") -> int:
-    conn = connect()
+def insert_run(wall_id: int, roll_id: int, result: dict, note: str = "", conn=None) -> int:
+    own = conn is None
+    conn = conn or connect()
     try:
         cur = conn.execute(
             "INSERT INTO calc_runs(wall_id,roll_id,result_json,note,created_at) VALUES (?,?,?,?,?)",
             (wall_id, roll_id, json.dumps(result, ensure_ascii=False), note, datetime.now(timezone.utc).isoformat()),
         )
-        conn.commit()
+        if own:
+            conn.commit()
         return int(cur.lastrowid)
     finally:
-        conn.close()
+        if own:
+            conn.close()
 
 
 def list_runs(limit: int = 50):

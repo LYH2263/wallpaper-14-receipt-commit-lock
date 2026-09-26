@@ -18,6 +18,12 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT, wall_id INTEGER, roll_id INTEGER,
             result_json TEXT, note TEXT, created_at TEXT
         );
+        CREATE TABLE IF NOT EXISTS receipts(
+            token TEXT PRIMARY KEY,
+            wall_id INTEGER NOT NULL, roll_id INTEGER NOT NULL, rolls INTEGER NOT NULL,
+            result_json TEXT NOT NULL, fingerprint TEXT NOT NULL,
+            created_at TEXT NOT NULL, used_at TEXT
+        );
         """
     )
     if conn.execute("SELECT COUNT(*) c FROM walls").fetchone()["c"] == 0:

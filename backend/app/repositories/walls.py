@@ -9,10 +9,12 @@ def list_walls():
         conn.close()
 
 
-def get_wall(wid: int):
-    conn = connect()
+def get_wall(wid: int, conn=None):
+    own = conn is None
+    conn = conn or connect()
     try:
         row = conn.execute("SELECT * FROM walls WHERE id=?", (wid,)).fetchone()
         return dict(row) if row else None
     finally:
-        conn.close()
+        if own:
+            conn.close()

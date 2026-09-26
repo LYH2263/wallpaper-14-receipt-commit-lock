@@ -1,8 +1,11 @@
 from pydantic import BaseModel
 
 
-class EstimateRequest(BaseModel):
+class DryRunRequest(BaseModel):
     wall_id: int
     roll_id: int
-    save: bool = False
+
+
+class ConfirmRequest(BaseModel):
+    receipt: str
     note: str = ""
