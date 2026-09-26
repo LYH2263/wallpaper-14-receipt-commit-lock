@@ -15,7 +15,11 @@ docker compose up --build
 
 ## 主链
 
-周长层高+花匹配 → 卷数 → 展开示意
+周长层高+花匹配 → 干算卷数 + 一次性回执 → 确认回执才落库 → 历史新增一行 → 展开示意
+
+- `POST /api/estimate`：干算，返回卷数与回执令牌（绑定墙/卷材编号与签发时快照，历史不增行）
+- `POST /api/estimate/confirm`：携带未使用回执才写入一条 run；回执缺失/已核销/墙或卷材已变更均失败且不增行
+- 回执签发、核销、写 run 分别在 `modules/receipt_issue`、`modules/receipt_redeem`、`modules/run_writer`
 
 ## 技术栈
 
